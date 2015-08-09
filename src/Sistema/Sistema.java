@@ -2,8 +2,8 @@ package Sistema;
 
 import java.sql.SQLException;
 import Modelo.Modelo;
-import ControladoresVistas.ControladorVentanaSocios.ControladorVentanaSocios;
-import ControladoresVistas.ControladorVentanaDatosSocio.ControladorVentanaDatosSocio;
+import Control.ControladorVentanaSocios;
+import Control.ControladorVentanaDatosSocio;
 
 /**
  * Clase encargada de la inicialización del sistema.
