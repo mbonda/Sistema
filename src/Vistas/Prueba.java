@@ -1,5 +1,5 @@
 
-package ControladoresVistas;
+package Vistas;
 
 public class Prueba 
 {

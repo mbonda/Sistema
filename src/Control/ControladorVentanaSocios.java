@@ -1,6 +1,6 @@
 package Control;
 
-import ControladoresVistas.ControladorVentanaSocios.VentanaSocios;
+import Vistas.VentanaSocios.VentanaSocios;
 import Modelo.Modelo;
 import Sistema.Sistema;
 import java.awt.event.ActionEvent;

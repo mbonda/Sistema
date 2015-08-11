@@ -1,4 +1,4 @@
-package ControladoresVistas.ControladorVentanaDatosSocio;
+package Vistas.VentanaDatosSocio;
 
 import ValidacionDatosEntrada.ValidacionDatosEntrada;
 import javax.swing.JFrame;
