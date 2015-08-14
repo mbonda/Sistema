@@ -23,7 +23,7 @@ public class Sistema {
     }
 
     private static void inciarSistema() throws SQLException {
-        modelo = new Modelo("BD", "postgres", "user");
+        modelo = new Modelo("Insect", "postgres", "user");
         controladorVentanaSocios = new ControladorVentanaSocios(modelo);
         controladorVentanaDatosSocio = new ControladorVentanaDatosSocio(modelo);
     }

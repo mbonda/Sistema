@@ -1,17 +1,19 @@
 package Control;
 
-import Vistas.VentanaDatosSocio.VentanaDatosSocio;
+import Vista.VentanaDatosSocio.VentanaDatosSocio;
 import Modelo.Modelo;
 import Sistema.Sistema;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 /**
- * Clase encargada de manejar las interacciones entre el modelo (BaseDeDatos) y
- * la vista (VentanaSocios y VentanaAgregarSocio).
+ * Clase encargada de manejar las interacciones entre el modelo y la vista
+ * VentanaDatosSocio.
  *
  * @author Mauri
  */
@@ -46,48 +48,57 @@ public class ControladorVentanaDatosSocio {
         Sistema.getControladorVentanaSocios().actualizarTablaSocios("SELECT * FROM socio WHERE activo=TRUE ORDER BY id ASC;");
     }
 
-    public void desplegarVentanaAgregarSocio() {
+    public void desplegarVentanaAgregarSocio() throws SQLException {
         ventanaAgregarSocio.setVisible(true);
         ventanaAgregarSocio.setTitle("Agregar socio");
         rellenarComboBoxCobrador(ventanaAgregarSocio);
+        rellenarComboBoxLocalidades(ventanaAgregarSocio, "Uruguay");
+
     }
 
-    public void desplegarVentanaEditarSocio() {
+    public void desplegarVentanaEditarSocio() throws SQLException {
         ventanaEditarSocio.setVisible(true);
-        ventanaEditarSocio.setTitle("Editar datos de socio");
+        ventanaEditarSocio.setTitle("Editar datos del socio seleccionado");
         rellenarComboBoxCobrador(ventanaEditarSocio);
 
         JTable tablaSocios = Sistema.getControladorVentanaSocios().getTablaSocios();
         int nroFilaSeleccionada = tablaSocios.getSelectedRow();
 
         // Obtener el valor de cada columna (índice N) del socio seleccionado:
-        // Columna en la posición 1 es 'ID' y está oculta...
+        // Columna en la posición 0 es 'ID' y está oculta...
         Object nombre = tablaSocios.getValueAt(nroFilaSeleccionada, 1);
         Object RUT = tablaSocios.getValueAt(nroFilaSeleccionada, 2);
         Object nroSocio = tablaSocios.getValueAt(nroFilaSeleccionada, 3);
         Object direccion = tablaSocios.getValueAt(nroFilaSeleccionada, 4);
         Object telefono = tablaSocios.getValueAt(nroFilaSeleccionada, 5);
-        Object moneda = tablaSocios.getValueAt(nroFilaSeleccionada, 6);
-        // Columna en la posición 7 es 'activo' y está oculta...
-        Object facturacion = tablaSocios.getValueAt(nroFilaSeleccionada, 8);
-        Object cobrador = tablaSocios.getValueAt(nroFilaSeleccionada, 9);
-        Object localidad = tablaSocios.getValueAt(nroFilaSeleccionada, 10);
+        // Columna en la posición 6 es 'activo' y está oculta...
+        Object facturacion = tablaSocios.getValueAt(nroFilaSeleccionada, 7);
+        Object cobrador = tablaSocios.getValueAt(nroFilaSeleccionada, 8);
+        Object localidad = tablaSocios.getValueAt(nroFilaSeleccionada, 9);
 
-        //Desplegar los valores obtenidos en los JTextField's correspondientes:
+        //Desplegar los valores obtenidos en los JTextField's y ComboBoxes correspondientes:
         ventanaEditarSocio.getCampoNombre().setText(nombre.toString());
         ventanaEditarSocio.getCampoRUT().setText(RUT.toString());
         ventanaEditarSocio.getCampoNroSocio().setText(nroSocio.toString());
         ventanaEditarSocio.getCampoDireccion().setText(direccion.toString());
         ventanaEditarSocio.getCampoTelefono().setText(telefono.toString());
-        ventanaEditarSocio.getCboxMonedas().setSelectedItem(moneda.toString());
         ventanaEditarSocio.getCboxFacturacion().setSelectedItem(facturacion.toString());
         ventanaEditarSocio.getCboxCobrador().setSelectedItem(cobrador.toString());
-        ventanaEditarSocio.getCampoLocalidad().setText(localidad.toString());
+        // Para mostrar el país es necesario consultar la base:
+        ResultSet resultadoConsulta = modelo.realizarConsulta("SELECT Pais FROM LOCALIDAD WHERE Nombre = '" + localidad + "';");
+        resultadoConsulta.next();   // Apuntar el cursor del ResultSet a la primera (y única) fila del resultado de la consulta
+        String pais = (String) resultadoConsulta.getObject(1);  // Obtiene el valor de la primer columna de la fila apuntada por el cursor del ResultSet
+        // Seleccionar país y localidad correspondientes en los JComboBoxes:
+        ventanaEditarSocio.getCboxPaises().setSelectedItem(pais);
+        rellenarComboBoxLocalidades(ventanaEditarSocio, pais);
+        ventanaEditarSocio.getCboxLocalidades().setSelectedItem(localidad.toString());
     }
-    
+
     /**
-     * Método auxiliar que rellena el JComboBox con todos los números de cobrador de la tabla COBRADOR.
-     * @param ventana 
+     * Método auxiliar que rellena el JComboBox con todos los números de
+     * cobrador de la tabla COBRADOR.
+     *
+     * @param ventana
      */
     private void rellenarComboBoxCobrador(VentanaDatosSocio ventana) {
         try {
@@ -106,11 +117,34 @@ public class ControladorVentanaDatosSocio {
     }
 
     /**
+     * Método auxiliar que rellena el JComboBox con todos los números de
+     * cobrador de la tabla COBRADOR.
+     *
+     * @param ventana
+     */
+    private void rellenarComboBoxLocalidades(VentanaDatosSocio ventana, String pais) throws SQLException {
+        // Vaciar JComboBox antes de agregar nuevos items:
+        ventana.getCboxLocalidades().removeAllItems();
+        
+        String sql = "SELECT Nombre FROM LOCALIDAD WHERE Pais = '" + pais + "' ORDER BY Nombre ASC;";
+        ResultSet localidades = modelo.realizarConsulta(sql);
+        while (localidades.next()) {
+            String localidad = localidades.getString(1); // 1 es la posición de la primer columna de la tabla: Nombre de la localidad
+            if (localidad != null) {
+                localidad = localidad.trim();
+            }
+            ventana.getCboxLocalidades().addItem(localidad);
+        }
+    }
+
+    /**
      * Registra el listener del botón de cada ventana.
      */
     private void registrarListeners() {
         ventanaAgregarSocio.agregarListenerBotonGuardarNuevoSocio(new VentanaAgregarSocioBotonGuardarAL());
         ventanaEditarSocio.agregarListenerBotonGuardarDatosModificados(new VentanaEditarSocioBotonGuardarAL());
+        ventanaAgregarSocio.agregarListenercboxLocalidades(new ItemChangeListener());
+        ventanaEditarSocio.agregarListenercboxLocalidades(new ItemChangeListener());
     }
 
     /**
@@ -136,12 +170,9 @@ public class ControladorVentanaDatosSocio {
             String RUT = ventanaAgregarSocio.getCampoRUT().getText();
             String telefono = ventanaAgregarSocio.getCampoTelefono().getText();
             String direccion = ventanaAgregarSocio.getCampoDireccion().getText();
-            String localidad = ventanaAgregarSocio.getCampoLocalidad().getText();
-            String dptoProvincia = ventanaAgregarSocio.getCampoDptoProvincia().getText();
-            String pais = (String) ventanaAgregarSocio.getCboxPaises().getSelectedItem();
+            String localidad = (String) ventanaAgregarSocio.getCboxLocalidades().getSelectedItem();
             String nroCobrador = (String) ventanaAgregarSocio.getCboxCobrador().getSelectedItem();
             String facturacion = (String) ventanaAgregarSocio.getCboxFacturacion().getSelectedItem();
-            String moneda = (String) ventanaAgregarSocio.getCboxMonedas().getSelectedItem();
 
             // Formateo de valores para hacer el INSERT en la base
             nroSocio = nroSocio.equals("") ? null : nroSocio;
@@ -150,14 +181,12 @@ public class ControladorVentanaDatosSocio {
             telefono = telefono.equals("") ? null : telefono;
             direccion = direccion.equals("") ? null : direccion;
             localidad = localidad.equals("") ? null : localidad;
-            // ¿En qué tabla insertar Dpto/Provincia y País?
             nroCobrador = nroCobrador.equals("") ? null : nroCobrador;
             facturacion = facturacion.equals("") ? null : facturacion;
-            moneda = moneda.equals("") ? null : moneda;
- 
+
             if (nroSocio != null && nombre != null) {
-                String sentenciaINSERT = "INSERT INTO socio (Nombre, RUT, NroSocio, Direccion, Telefono, Moneda, Activo, Facturacion, Cobrador, Localidad) VALUES ("
-                        + "'" + nombre + "', '" + RUT + "', " + nroSocio + ", '" + direccion + "', '" + telefono + "', '" + moneda + "', TRUE, '" + facturacion + "', " + nroCobrador + ", '" + localidad + "');";
+                String sentenciaINSERT = "INSERT INTO socio (Nombre, RUT, NroSocio, Direccion, Telefono, Activo, Facturacion, Cobrador, Localidad) VALUES ("
+                        + "'" + nombre + "', '" + RUT + "', " + nroSocio + ", '" + direccion + "', '" + telefono + "', TRUE, '" + facturacion + "', " + nroCobrador + ", '" + localidad + "');";
                 try {
                     modelo.ejecutarSentencia(sentenciaINSERT);
                     actualizarVentanaSocios();
@@ -169,8 +198,7 @@ public class ControladorVentanaDatosSocio {
                 ventanaAgregarSocio.getCampoRUT().setText("");
                 ventanaAgregarSocio.getCampoTelefono().setText("");
                 ventanaAgregarSocio.getCampoDireccion().setText("");
-                ventanaAgregarSocio.getCampoLocalidad().setText("");
-                ventanaAgregarSocio.getCampoDptoProvincia().setText("");
+                ventanaAgregarSocio.getCboxLocalidades().setSelectedItem(null);
                 rellenarComboBoxCobrador(ventanaEditarSocio);
 
                 // Cerrar la ventana:
@@ -198,22 +226,35 @@ public class ControladorVentanaDatosSocio {
             String RUT = ventanaEditarSocio.getCampoRUT().getText();
             String telefono = ventanaEditarSocio.getCampoTelefono().getText();
             String direccion = ventanaEditarSocio.getCampoDireccion().getText();
-            String localidad = ventanaEditarSocio.getCampoLocalidad().getText();
-            String dptoProvincia = ventanaEditarSocio.getCampoDptoProvincia().getText();
-            String pais = (String) ventanaEditarSocio.getCboxPaises().getSelectedItem();
+            String localidad = (String) ventanaEditarSocio.getCboxLocalidades().getSelectedItem();
             String nroCobrador = (String) ventanaEditarSocio.getCboxCobrador().getSelectedItem();
             String facturacion = (String) ventanaEditarSocio.getCboxFacturacion().getSelectedItem();
-            String moneda = (String) ventanaEditarSocio.getCboxMonedas().getSelectedItem();
 
             String sentenciaUPDATE
                     = "UPDATE socio SET "
-                    + "nrosocio=" + nroSocio + ", nombre='" + nombre + "', RUT ='" + RUT +"', telefono=" + telefono + ", direccion='" + direccion + "', localidad='" + localidad + "', cobrador=" + nroCobrador + ", facturacion='" + facturacion + "', moneda='" + moneda + "' " 
+                    + "nrosocio=" + nroSocio + ", nombre='" + nombre + "', RUT ='" + RUT + "', telefono=" + telefono + ", direccion='" + direccion + "', localidad='" + localidad + "', cobrador=" + nroCobrador + ", facturacion='" + facturacion + "' "
                     + "WHERE id=" + ID + ";";
             try {
                 modelo.ejecutarSentencia(sentenciaUPDATE);
                 actualizarVentanaSocios();
                 ventanaEditarSocio.dispose();   // Tras la actualización de los datos del socio, la ventana se cierra
             } catch (Exception e) {
+            }
+        }
+    }
+
+    /**
+     * Clase manejadora de eventos de selección de items en un componente.
+     */
+    class ItemChangeListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            String paisSeleccionado = (String) ventanaAgregarSocio.getCboxPaises().getSelectedItem();
+            try {
+                rellenarComboBoxLocalidades(ventanaAgregarSocio, paisSeleccionado);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorVentanaDatosSocio.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

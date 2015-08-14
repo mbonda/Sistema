@@ -1,11 +1,13 @@
 package Control;
 
-import Vistas.VentanaSocios.VentanaSocios;
+import Vista.VentanaSocios.VentanaSocios;
 import Modelo.Modelo;
 import Sistema.Sistema;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -47,9 +49,9 @@ public class ControladorVentanaSocios {
         DefaultTableModel modeloTabla = Modelo.crearModeloTabla(resultadoConsulta);
         JTable tablaSocios = getTablaSocios();
         tablaSocios.setModel(modeloTabla);
-        // Ocultar columna 'ID' (índice de columna 0) y columna 'activo' (índice de columna 7):
+        // Ocultar columna 'ID' (índice de columna 0) y columna 'activo' (índice de columna 6):
         ocultarColumna(0, tablaSocios);
-        ocultarColumna(7, tablaSocios);
+        ocultarColumna(6, tablaSocios);
     }
     
     private void ocultarColumna(int indiceColumna, JTable tabla)
@@ -144,8 +146,12 @@ public class ControladorVentanaSocios {
             if (nroFilaSeleccionada == -1) // Si no hay una fila seleccionada, entonces:
             {
                 JOptionPane.showMessageDialog(tablaSocios, "Debe seleccionar un socio para poder editarlo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            } else {   // Hay una fila seleccionada:
+            } else {   try {
+                // Hay una fila seleccionada:
                 Sistema.getControladorVentanaDatosSocio().desplegarVentanaEditarSocio();
+                } catch (SQLException ex) {
+                    Logger.getLogger(ControladorVentanaSocios.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

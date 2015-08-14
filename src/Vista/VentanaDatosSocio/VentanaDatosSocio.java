@@ -1,11 +1,13 @@
-package Vistas.VentanaDatosSocio;
+package Vista.VentanaDatosSocio;
 
 import ValidacionDatosEntrada.ValidacionDatosEntrada;
 import javax.swing.JFrame;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class VentanaDatosSocio extends JFrame {
-    
+
     private JFrame ventanaSocios;
 
     /**
@@ -17,25 +19,38 @@ public class VentanaDatosSocio extends JFrame {
         campoNroSocio.addKeyListener(new ValidacionDatosEntrada());
         campoTelefono.addKeyListener(new ValidacionDatosEntrada());
     }
-    
-        
+
     /**
-     * Registra un listener en el botón 'Guardar' de esta ventana, para insertar los datos del nuevo socio.
-     * @param ae 
+     * Registra un listener en el botón 'Guardar' de esta ventana, para insertar
+     * los datos del nuevo socio.
+     *
+     * @param ae
      */
-    public void agregarListenerBotonGuardarNuevoSocio(ActionListener ae)
-    {
+    public void agregarListenerBotonGuardarNuevoSocio(ActionListener ae) {
         botonGuardar.addActionListener(ae);
     }
-    
+
     /**
-     * Registra un listener en el botón 'Guardar' de esta ventana, para actualizar los datos del socio seleccionado.
-     * @param ae 
+     * Registra un listener en el botón 'Guardar' de esta ventana, para
+     * actualizar los datos del socio seleccionado.
+     *
+     * @param ae
      */
-    public void agregarListenerBotonGuardarDatosModificados(ActionListener ae)
-    {
+    public void agregarListenerBotonGuardarDatosModificados(ActionListener ae) {
         botonGuardar.addActionListener(ae);
-    } 
+    }
+
+    /**
+     * Registra un listener en el combobox 'cBoxPaises' de esta ventana, para
+     * rellenar el combobox 'cboxLocalidades' con las localidades del país
+     * seleccionado
+     *
+     * @param ae
+     */
+    public void agregarListenercboxLocalidades(ActionListener ae) {
+        cboxPaises.addActionListener(ae);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,15 +76,11 @@ public class VentanaDatosSocio extends JFrame {
         jLabel6 = new javax.swing.JLabel();
         cboxFacturacion = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
-        cboxMonedas = new javax.swing.JComboBox();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        campoLocalidad = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        campoDptoProvincia = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         cboxPaises = new javax.swing.JComboBox();
         cboxCobrador = new javax.swing.JComboBox();
+        cboxLocalidades = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -131,26 +142,11 @@ public class VentanaDatosSocio extends JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Facturación");
 
-        cboxMonedas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboxMonedas.setMaximumRowCount(2);
-        cboxMonedas.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pesos", "Dólares" }));
-        cboxMonedas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Moneda");
-
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel9.setText("Localidad");
-
-        campoLocalidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel10.setText("Departamento/Provincia");
-
-        campoDptoProvincia.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setText("País");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel11.setText("País");
+        jLabel11.setText("Localidad");
 
         cboxPaises.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboxPaises.setMaximumRowCount(2);
@@ -161,12 +157,16 @@ public class VentanaDatosSocio extends JFrame {
         cboxCobrador.setMaximumRowCount(2);
         cboxCobrador.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        cboxLocalidades.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboxLocalidades.setMaximumRowCount(2);
+        cboxLocalidades.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(58, Short.MAX_VALUE)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -191,31 +191,22 @@ public class VentanaDatosSocio extends JFrame {
                             .addComponent(campoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(cboxFacturacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboxMonedas, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cboxCobrador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(148, 148, 148))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(campoDptoProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                                .addComponent(cboxPaises, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboxPaises, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(campoLocalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(cboxLocalidades, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cboxFacturacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cboxCobrador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(314, 314, 314)))))
                 .addContainerGap())
         );
         panelLayout.setVerticalGroup(
@@ -243,26 +234,18 @@ public class VentanaDatosSocio extends JFrame {
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoLocalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoDptoProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
+                    .addComponent(jLabel9)
                     .addComponent(cboxPaises, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
+                    .addComponent(jLabel11)
+                    .addComponent(cboxLocalidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(cboxCobrador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cboxFacturacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7))
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
-                        .addComponent(cboxMonedas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cboxFacturacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -307,23 +290,20 @@ public class VentanaDatosSocio extends JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CampoRUTActionPerformed
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CampoDireccion;
     private javax.swing.JTextField CampoRUT;
     private javax.swing.JButton botonCancelar;
     private javax.swing.JButton botonGuardar;
-    private javax.swing.JTextField campoDptoProvincia;
-    private javax.swing.JTextField campoLocalidad;
     private javax.swing.JTextField campoNombre;
     private javax.swing.JTextField campoNroSocio;
     private javax.swing.JTextField campoTelefono;
     private javax.swing.JComboBox cboxCobrador;
     private javax.swing.JComboBox cboxFacturacion;
-    private javax.swing.JComboBox cboxMonedas;
+    private javax.swing.JComboBox cboxLocalidades;
     private javax.swing.JComboBox cboxPaises;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -331,7 +311,6 @@ public class VentanaDatosSocio extends JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
@@ -384,51 +363,19 @@ public class VentanaDatosSocio extends JFrame {
         this.CampoRUT = CampoRUT;
     }
 
-    public javax.swing.JTextField getCampoDptoProvincia() {
-        return campoDptoProvincia;
-    }
-
-    public void setCampoDptoProvincia(javax.swing.JTextField campoDptoProvincia) {
-        this.campoDptoProvincia = campoDptoProvincia;
-    }
-
-    public javax.swing.JTextField getCampoLocalidad() {
-        return campoLocalidad;
-    }
-
-    public void setCampoLocalidad(javax.swing.JTextField campoLocalidad) {
-        this.campoLocalidad = campoLocalidad;
-    }
-
     public javax.swing.JComboBox getCboxFacturacion() {
         return cboxFacturacion;
-    }
-
-    public void setCboxFacturacion(javax.swing.JComboBox cboxFacturacion) {
-        this.cboxFacturacion = cboxFacturacion;
-    }
-
-    public javax.swing.JComboBox getCboxMonedas() {
-        return cboxMonedas;
-    }
-
-    public void setCboxMonedas(javax.swing.JComboBox cboxMonedas) {
-        this.cboxMonedas = cboxMonedas;
     }
 
     public javax.swing.JComboBox getCboxPaises() {
         return cboxPaises;
     }
 
-    public void setCboxPaises(javax.swing.JComboBox cboxPaises) {
-        this.cboxPaises = cboxPaises;
-    }
-
     public javax.swing.JComboBox getCboxCobrador() {
         return cboxCobrador;
     }
 
-    public void setCboxCobrador(javax.swing.JComboBox cboxCobrador) {
-        this.cboxCobrador = cboxCobrador;
+    public javax.swing.JComboBox getCboxLocalidades() {
+        return cboxLocalidades;
     }
 }

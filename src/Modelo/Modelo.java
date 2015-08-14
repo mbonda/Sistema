@@ -2,7 +2,6 @@ package Modelo;
 
 import java.sql.*;
 import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
 
 public class Modelo {
 
@@ -50,8 +49,7 @@ public class Modelo {
     }
 
     /**
-     * Realiza la consulta especificada como argumento y alamacena el resultado
-     * de la misma.
+     * Realiza la consulta especificada como argumento y almacena el resultado de la misma.
      *
      * @param consulta Consulta a realizar, cuyo resultado es almacenado.
      * @return

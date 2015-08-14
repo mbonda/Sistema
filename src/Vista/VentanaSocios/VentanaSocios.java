@@ -1,4 +1,4 @@
-package Vistas.VentanaSocios;
+package Vista.VentanaSocios;
 
 import ValidacionDatosEntrada.ValidacionDatosEntrada;
 import javax.swing.JFrame;
@@ -15,7 +15,7 @@ public class VentanaSocios extends JFrame {
         initComponents();
         this.setVisible(true);
         campoNroSocio.addKeyListener(new ValidacionDatosEntrada());     // Listener de validación de entrada para el campo 'Número de socio'
-        tablaSocios.setSelectionModel(new ForcedListSelectionModel());  // Limita la capacidad de selección de filas a uno
+        tablaSocios.setSelectionModel(new ForcedListSelectionModel());  // Limita la capacidad de selección de filas a una sóla por clic
     }
 
     /**
@@ -242,7 +242,7 @@ public class VentanaSocios extends JFrame {
     }
 
     /**
-     * Clase manejadora de los eventos de selección de la tabla. de socios.
+     * Clase manejadora de los eventos de selección de la tabla de socios.
      */
     public class ForcedListSelectionModel extends DefaultListSelectionModel {
 
