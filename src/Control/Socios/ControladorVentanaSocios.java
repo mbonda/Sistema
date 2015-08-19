@@ -1,6 +1,6 @@
-package Control;
+package Control.Socios;
 
-import Vista.VentanaSocios.VentanaSocios;
+import Vista.Socios.VentanaSocios.VentanaSocios;
 import Modelo.Modelo;
 import Sistema.Sistema;
 import java.awt.event.ActionEvent;
@@ -54,6 +54,11 @@ public class ControladorVentanaSocios {
         ocultarColumna(6, tablaSocios);
     }
     
+    /**
+     * Método auxiliar que oculta la columna que está en la posición indicada de la tabla pasada como argumento.
+     * @param indiceColumna Posición en la tabla, relativa a 0, de la columna que se va ocultar
+     * @param tabla JTable en en el cual se va a ocultar la columna
+     */
     private void ocultarColumna(int indiceColumna, JTable tabla)
     {
         TableColumn columna = tabla.getColumnModel().getColumn(indiceColumna);
@@ -105,11 +110,11 @@ public class ControladorVentanaSocios {
                 consulta = "SELECT * FROM socio";
 
                 if (!nroSocio.equals("") && nombreSocio.equals("")) {
-                    consulta += " WHERE numero = " + nroSocio + ";";
+                    consulta += " WHERE nrosocio = " + nroSocio + ";";
                 } else if (nroSocio.equals("") && !nombreSocio.equals("")) {
                     consulta += " WHERE LOWER(nombre) LIKE LOWER('%" + nombreSocio + "%');";
                 } else if (!nroSocio.equals("") && !nombreSocio.equals("")) {
-                    consulta += " WHERE numero = " + nroSocio + " AND LOWER(nombre) LIKE LOWER('%" + nombreSocio + "%');";
+                    consulta += " WHERE nrosocio = " + nroSocio + " AND LOWER(nombre) LIKE LOWER('%" + nombreSocio + "%');";
                 }
 
                 actualizarTablaSocios(consulta);
@@ -127,7 +132,11 @@ public class ControladorVentanaSocios {
          * 'botonAgregarSocio' de 'ventanaSocios'.
          */
         public void actionPerformed(ActionEvent ae) {
-            Sistema.getControladorVentanaDatosSocio().desplegarVentanaAgregarSocio();
+            try {
+                Sistema.getControladorVentanaDatosSocio().desplegarVentanaAgregarSocio();
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorVentanaSocios.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -145,7 +154,7 @@ public class ControladorVentanaSocios {
             // Comprobar si hay una fila seleccionada en la tabla de socios:
             if (nroFilaSeleccionada == -1) // Si no hay una fila seleccionada, entonces:
             {
-                JOptionPane.showMessageDialog(tablaSocios, "Debe seleccionar un socio para poder editarlo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(tablaSocios, "Seleccione un socio para poder editarlo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {   try {
                 // Hay una fila seleccionada:
                 Sistema.getControladorVentanaDatosSocio().desplegarVentanaEditarSocio();
@@ -170,7 +179,7 @@ public class ControladorVentanaSocios {
             // Comprobar si hay una fila seleccionada en la tabla de socios:
             if (nroFilaSeleccionada == -1) // Si no hay una fila seleccionada, entonces:
             {
-                JOptionPane.showMessageDialog(tablaSocios, "Debe seleccionar el socio que va a eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(tablaSocios, "Seleccione el socio que quiere eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             } else {
                 // Recuperación del valor de 'ID' de la fila actualmente seleccionada:
                 String ID = ventanaSocios.getIDFila();

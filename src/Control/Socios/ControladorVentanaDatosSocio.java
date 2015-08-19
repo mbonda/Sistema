@@ -1,6 +1,6 @@
-package Control;
+package Control.Socios;
 
-import Vista.VentanaDatosSocio.VentanaDatosSocio;
+import Vista.Socios.VentanaDatosSocio.VentanaDatosSocio;
 import Modelo.Modelo;
 import Sistema.Sistema;
 import java.awt.event.ActionEvent;
@@ -117,15 +117,15 @@ public class ControladorVentanaDatosSocio {
     }
 
     /**
-     * Método auxiliar que rellena el JComboBox con todos los números de
-     * cobrador de la tabla COBRADOR.
+     * Método auxiliar que rellena 'cboxLocalidades' con todos las localidades
+     * correspondientes al país seleccionado en 'cboxPaises'.
      *
      * @param ventana
      */
     private void rellenarComboBoxLocalidades(VentanaDatosSocio ventana, String pais) throws SQLException {
-        // Vaciar JComboBox antes de agregar nuevos items:
+        // Vaciar JComboBox antes de actualizar con nuevas localidades:
         ventana.getCboxLocalidades().removeAllItems();
-        
+
         String sql = "SELECT Nombre FROM LOCALIDAD WHERE Pais = '" + pais + "' ORDER BY Nombre ASC;";
         ResultSet localidades = modelo.realizarConsulta(sql);
         while (localidades.next()) {
@@ -138,7 +138,7 @@ public class ControladorVentanaDatosSocio {
     }
 
     /**
-     * Registra el listener del botón de cada ventana.
+     * Registra los listeners en su respectivo componente de cada ventana.
      */
     private void registrarListeners() {
         ventanaAgregarSocio.agregarListenerBotonGuardarNuevoSocio(new VentanaAgregarSocioBotonGuardarAL());
@@ -156,9 +156,9 @@ public class ControladorVentanaDatosSocio {
         @Override
         /**
          * Acción realizada cuando se presiona el botón 'Guardar' en la ventana
-         * 'ventanaAgregarSocio'. Recupera los valores ingresados en los campos
-         * e inserta dichos valores en la base, representando una tupla
-         * correspondiente al nuevo socio.
+         * 'ventanaAgregarSocio'. Recupera los valores ingresados en los
+         * campos e inserta dichos valores en la base, representando con una
+         * tupla al nuevo socio.
          *
          * @param ae
          */
@@ -188,6 +188,7 @@ public class ControladorVentanaDatosSocio {
                 String sentenciaINSERT = "INSERT INTO socio (Nombre, RUT, NroSocio, Direccion, Telefono, Activo, Facturacion, Cobrador, Localidad) VALUES ("
                         + "'" + nombre + "', '" + RUT + "', " + nroSocio + ", '" + direccion + "', '" + telefono + "', TRUE, '" + facturacion + "', " + nroCobrador + ", '" + localidad + "');";
                 try {
+                    // Inserción del nuevo socio:
                     modelo.ejecutarSentencia(sentenciaINSERT);
                     actualizarVentanaSocios();
                 } catch (SQLException ex) {
@@ -200,7 +201,6 @@ public class ControladorVentanaDatosSocio {
                 ventanaAgregarSocio.getCampoDireccion().setText("");
                 ventanaAgregarSocio.getCboxLocalidades().setSelectedItem(null);
                 rellenarComboBoxCobrador(ventanaEditarSocio);
-
                 // Cerrar la ventana:
                 ventanaAgregarSocio.dispose();
             } else {
@@ -235,24 +235,33 @@ public class ControladorVentanaDatosSocio {
                     + "nrosocio=" + nroSocio + ", nombre='" + nombre + "', RUT ='" + RUT + "', telefono=" + telefono + ", direccion='" + direccion + "', localidad='" + localidad + "', cobrador=" + nroCobrador + ", facturacion='" + facturacion + "' "
                     + "WHERE id=" + ID + ";";
             try {
+                // Actualización de los datos del socio:
                 modelo.ejecutarSentencia(sentenciaUPDATE);
                 actualizarVentanaSocios();
-                ventanaEditarSocio.dispose();   // Tras la actualización de los datos del socio, la ventana se cierra
+                ventanaEditarSocio.dispose();
             } catch (Exception e) {
             }
         }
     }
 
     /**
-     * Clase manejadora de eventos de selección de items en un componente.
+     * Clase manejadora de eventos de selección, responsable de actualizar ambas ventanas con las localidades correspondientes al país actualmente seleccionado.  
      */
     class ItemChangeListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            String paisSeleccionado = (String) ventanaAgregarSocio.getCboxPaises().getSelectedItem();
+            String paisSeleccionado;
+            // Actualizar la ventana 'Agregar socio':
+            paisSeleccionado = (String) ventanaAgregarSocio.getCboxPaises().getSelectedItem();
             try {
                 rellenarComboBoxLocalidades(ventanaAgregarSocio, paisSeleccionado);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorVentanaDatosSocio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            paisSeleccionado = (String) ventanaEditarSocio.getCboxPaises().getSelectedItem();
+            try {
+                rellenarComboBoxLocalidades(ventanaEditarSocio, paisSeleccionado);
             } catch (SQLException ex) {
                 Logger.getLogger(ControladorVentanaDatosSocio.class.getName()).log(Level.SEVERE, null, ex);
             }

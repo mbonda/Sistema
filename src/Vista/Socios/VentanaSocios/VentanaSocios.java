@@ -1,4 +1,4 @@
-package Vista.VentanaSocios;
+package Vista.Socios.VentanaSocios;
 
 import ValidacionDatosEntrada.ValidacionDatosEntrada;
 import javax.swing.JFrame;
@@ -111,7 +111,7 @@ public class VentanaSocios extends JFrame {
         tablaSocios.setToolTipText("");
         panelScrolling.setViewportView(tablaSocios);
 
-        panelBusqueda.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Buscar socios", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+        panelBusqueda.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
         panelBusqueda.setToolTipText("Ingrese los criterios de búsqueda para encontrar socios");
 
         botonBuscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -130,11 +130,12 @@ public class VentanaSocios extends JFrame {
         panelBusquedaLayout.setHorizontalGroup(
             panelBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBusquedaLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(campoNombreSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoNroSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botonBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelBusquedaLayout.setVerticalGroup(
@@ -158,7 +159,7 @@ public class VentanaSocios extends JFrame {
 
         botonAgregarSocio.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         botonAgregarSocio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ControladoresVistas/ControladorVentanaSocios/Iconos/Agregar_socio.png"))); // NOI18N
-        botonAgregarSocio.setText("Agregar nuevo socio");
+        botonAgregarSocio.setText("Agregar socio");
         botonAgregarSocio.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         botonEditarSocio.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -198,7 +199,7 @@ public class VentanaSocios extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelScrolling, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)

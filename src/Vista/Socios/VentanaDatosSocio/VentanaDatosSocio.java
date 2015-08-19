@@ -1,10 +1,8 @@
-package Vista.VentanaDatosSocio;
+package Vista.Socios.VentanaDatosSocio;
 
 import ValidacionDatosEntrada.ValidacionDatosEntrada;
 import javax.swing.JFrame;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class VentanaDatosSocio extends JFrame {
 
